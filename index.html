@@ -53,12 +53,44 @@
                         // document.body.appendChild(a);
                         // a.click();
                         // window.URL.revokeObjectURL(url);
-                        // console.log("your file has downloaded!");
-                        var blob = new Blob([url], { type: 'application/pdf'});
-                        saveAs(blob, filename)
+                        // var blob = new Blob(url, { type: 'application/pdf'});
+                        var a = saveAs(url, filename)
+                        // console.log(blob);
+                        console.log(a);
                     }
                     );
                 });
+            }
+            /* Helper function */
+            async function download(fileURL, fileName) {
+                // for non-IE
+                if (!window.ActiveXObject) {
+                    var save = document.createElement('a');
+                    save.href = fileURL;
+                    save.target = '_blank';
+                    var filename = fileURL.substring(fileURL.lastIndexOf('/')+1);
+                    save.download = fileName || filename;
+                    if ( navigator.userAgent.toLowerCase().match(/(ipad|iphone|safari)/) && navigator.userAgent.search("Chrome") < 0) {
+                            document.location = save.href; 
+            // window event not working here
+                        }else{
+                            var evt = new MouseEvent('click', {
+                                'view': window,
+                                'bubbles': true,
+                                'cancelable': false
+                            });
+                            save.dispatchEvent(evt);
+                            (window.URL || window.webkitURL).revokeObjectURL(save.href);
+                        }	
+                }
+
+                // for IE < 11
+                else if ( !! window.ActiveXObject && document.execCommand)     {
+                    var _window = window.open(fileURL, '_blank');
+                    _window.document.close();
+                    _window.document.execCommand('SaveAs', true, fileName || fileURL)
+                    _window.close();
+                }
             }
             if(sendbtn != null) {
                 sendbtn.addEventListener('click', function(e) {
@@ -70,16 +102,16 @@
                 }
                 var promises = array.map(async function(value) {
                     if(value === "オンラインレッスン資料") {
-                    await download_file('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E6%B3%95%E4%BA%BA%E5%90%91%E3%81%91%E3%80%91StepForward_%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E7%A0%94%E4%BF%AE%E3%83%91%E3%83%B3%E3%83%95%E3%83%AC%E3%83%83%E3%83%88.pdf', '【一般向け】StepForward_Online Program');
+                    await download('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E6%B3%95%E4%BA%BA%E5%90%91%E3%81%91%E3%80%91StepForward_%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E7%A0%94%E4%BF%AE%E3%83%91%E3%83%B3%E3%83%95%E3%83%AC%E3%83%83%E3%83%88.pdf', '【一般向け】StepForward_Online Program');
                     } else if(value === "学生様向けオンラインレッスン資料"){
-                    await download_file('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【学生向け】StepForward_Online Program');
+                    await download('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【学生向け】StepForward_Online Program');
                     } else if(value === "法人様向けオンラインレッスン資料"){
-                    await download_file('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E4%B8%80%E8%88%AC%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【法人向け】StepForward_オンライン研修パンフレット');
+                    await download('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E4%B8%80%E8%88%AC%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【法人向け】StepForward_オンライン研修パンフレット');
                     }
                 });
                 Promise.all(promises).then(function() {
-                    requestform.submit();
-                    window.location.replace("https://stepforward-learning.com/thank-you-request/");
+                    // requestform.submit();
+                    // window.location.replace("https://stepforward-learning.com/thank-you-request/");
                 });
                 }, false);
             }
