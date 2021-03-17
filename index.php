@@ -1,3 +1,9 @@
+<?php 
+ini_set('session.cookie_samesite', 'None');
+session_start();
+header('Set-Cookie: fileDownload=true; path=/');
+header('Cache-Control: max-age=60, must-revalidate');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +15,7 @@
   src="https://code.jquery.com/jquery-3.6.0.min.js"
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
   crossorigin="anonymous"></script>
+  <script src="./jquery.fileDownload.js"></script>
   <style>
     .wpcf7-list-item {
         display: block;
@@ -71,8 +78,8 @@
                     }
                 });
                 Promise.all(promises).then(function() {
-                    requestform.submit();
-                    window.location.replace("https://stepforward-learning.com/thank-you-request/");
+                    // requestform.submit();
+                    // window.location.replace("https://stepforward-learning.com/thank-you-request/");
                 });
                 }, false);
             }
