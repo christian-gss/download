@@ -53,6 +53,8 @@ crossorigin="anonymous"></script>
             .then((blob) => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement("a");
+                
+                window.open(url,"_blank");
                 if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase())) {
                    
                     window.open(url, "_blank");
