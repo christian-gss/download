@@ -22,6 +22,8 @@ crossorigin="anonymous"></script>
         <td><span class="wpcf7-form-control-wrap checkbox-125"><span class="wpcf7-form-control wpcf7-checkbox wpcf7-validates-as-required"><span class="wpcf7-list-item first"><input type="checkbox" name="checkbox-125[]" value="オンラインレッスン資料"><span class="wpcf7-list-item-label">オンラインレッスン資料</span></span><span class="wpcf7-list-item"><input type="checkbox" name="checkbox-125[]" value="学生様向けオンラインレッスン資料"><span class="wpcf7-list-item-label">学生様向けオンラインレッスン資料</span></span><span class="wpcf7-list-item last"><input type="checkbox" name="checkbox-125[]" value="法人様向けオンラインレッスン資料"><span class="wpcf7-list-item-label">法人様向けオンラインレッスン資料</span></span></span></span></td>
     <!-- </div> -->
     <button class="wpcf7-submit">download</button>
+    <br/>
+    <a download="1.pdf" href="./1.pdf">Click here to Download quotation</a>
 </form>
   <script src="./download.js"></script>
     <script>
@@ -31,37 +33,32 @@ crossorigin="anonymous"></script>
         var array = [];
 
         $( document ).ready(function() {
-
-            download_file('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【学生向け】StepForward_Online Program', 'application/pdf');
-
-
-
         const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
           async function download_file(url, filename) {
-                await fetch(proxyUrl + url, {
-                method: 'post',
-                mode: 'cors',
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/pdf',
+            await fetch(proxyUrl + url, {
+                method: 'GET',
+                }).then(function(resp) {
+                return resp.blob();
+                }).then(function(blob) {
+                const newBlob = new Blob([blob], { type: "application/pdf", charset: "UTF-8" })
+
+                // IE doesn't allow using a blob object directly as link href
+                // instead it is necessary to use msSaveOrOpenBlob
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(newBlob);
+                    return;
                 }
-                }).then(function(t) {
-                    return t.blob().then((b)=>{
-                        var a = document.createElement("a");
-                        var url = window.URL.createObjectURL(b);
-                        // a.href = URL.createObjectURL(b);
-                        a.style.display = "none";
-                        a.href = url;
-                        // a.setAttribute("download", filename);
-                        a.download = filename;
-                        document.body.append(a);
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                        delay(100);
-                        a.remove();
-                    }
-                    );
+                const data = window.URL.createObjectURL(newBlob);
+                const link = document.createElement('a');
+                link.dataType = "json";
+                link.href = data;
+                link.download = "file.pdf";
+                link.dispatchEvent(new MouseEvent('click'));
+                setTimeout(function () {
+                    // For Firefox it is necessary to delay revoking the ObjectURL
+                    window.URL.revokeObjectURL(data), 60
+                });
                 });
             }
             if(sendbtn != null) {
@@ -88,6 +85,72 @@ crossorigin="anonymous"></script>
                 }, false);
             }
         });
+    </script>
+    <script>
+        (function (){
+
+addEvent(window, "load", function (){
+    if (isInternetExplorer())
+        polyfillDataUriDownload();
+});
+
+function polyfillDataUriDownload(){
+    var links = document.querySelectorAll('a[download], area[download]');
+    for (var index = 0, length = links.length; index<length; ++index) {
+        (function (link){
+            var dataUri = link.getAttribute("href");
+            var fileName = link.getAttribute("download");
+            if (dataUri.slice(0,5) != "data:")
+                throw new Error("The XHR part is not implemented here.");
+            addEvent(link, "click", function (event){
+                cancelEvent(event);
+                try {
+                    var dataBlob = dataUriToBlob(dataUri);
+                    forceBlobDownload(dataBlob, fileName);
+                } catch (e) {
+                    alert(e)
+                }
+            });
+        })(links[index]);
+    }
+}
+
+function forceBlobDownload(dataBlob, fileName){
+    window.navigator.msSaveBlob(dataBlob, fileName);
+}
+
+function dataUriToBlob(dataUri) {
+    if  (!(/base64/).test(dataUri))
+        throw new Error("Supports only base64 encoding.");
+    var parts = dataUri.split(/[:;,]/),
+        type = parts[1],
+        binData = atob(parts.pop()),
+        mx = binData.length,
+        uiArr = new Uint8Array(mx);
+    for(var i = 0; i<mx; ++i)
+        uiArr[i] = binData.charCodeAt(i);
+    return new Blob([uiArr], {type: type});
+}
+
+function addEvent(subject, type, listener){
+    if (window.addEventListener)
+        subject.addEventListener(type, listener, false);
+    else if (window.attachEvent)
+        subject.attachEvent("on" + type, listener);
+}
+
+function cancelEvent(event){
+    if (event.preventDefault)
+        event.preventDefault();
+    else
+        event.returnValue = false;
+}
+
+function isInternetExplorer(){
+    return /*@cc_on!@*/false || !!document.documentMode;
+}
+
+})();
     </script>
 </body>
 </html>
