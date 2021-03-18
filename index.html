@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    
+    <style>
+        .wpcf7-list-item {
+            display: block;
+        }
+      </style>
 <script
 src="https://code.jquery.com/jquery-3.6.0.min.js"
 integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 crossorigin="anonymous"></script>
-  <style>
-    .wpcf7-list-item {
-        display: block;
-    }
-  </style>
+ <script src="./Blob.js"></script>
 </head>
 <body id="wpcf7-f89-p90-o1">
     <!-- <form action="/request/#wpcf7-f89-p90-o1" method="post" class="wpcf7-form" novalidate="novalidate" wpcf7c="89" step="1"> -->
@@ -53,15 +53,27 @@ crossorigin="anonymous"></script>
             .then((blob) => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement("a");
-   window.open(url, "_blank");
-                a.style.display = "none";
-                a.href = url;
-                // the filename you want
-                a.download = "1.pdf";
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                alert("your file has downloaded!"); // or you know, something with better UX...
+                if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase())) {
+                   
+                    window.open(url, "_blank");
+                    a.style.display = "none";
+                    a.href = url;
+                    // the filename you want
+                    a.download = "1.pdf";
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    alert("your file has downloaded!"); // or you know, something with better UX...
+                } else {
+                    a.style.display = "none";
+                    a.href = url;
+                    // the filename you want
+                    a.download = "1.pdf";
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    alert("your file has downloaded!"); // or you know, something with better UX...
+                }
             })
             .catch(() => alert("oh no!"));
         };
