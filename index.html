@@ -53,6 +53,7 @@ crossorigin="anonymous"></script>
             .then((blob) => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement("a");
+   window.open(url, "_blank");
                 a.style.display = "none";
                 a.href = url;
                 // the filename you want
