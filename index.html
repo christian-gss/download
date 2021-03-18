@@ -23,9 +23,48 @@ crossorigin="anonymous"></script>
     <!-- </div> -->
     <button class="wpcf7-submit">download</button>
     <br/>
-    <a download="1.pdf" href="./1.pdf">Click here to Download quotation</a>
+    <button id="btn" >Do Fetch Download</button>
 </form>
-  <script src="./download.js"></script>
+    <script>
+        $('#btn').on("click", (function () {
+            fetch(
+            "https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf"
+            )
+            .then((resp) => resp.blob())
+            .then((blob) => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.style.display = "none";
+                a.href = url;
+                // the filename you want
+                a.download = "1.pdf";
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                alert("your file has downloaded!"); // or you know, something with better UX...
+            })
+            .catch(() => alert("oh no!"));
+        }));
+        // const doFetchDownload = () => {
+        //     fetch(
+        //     "https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf"
+        //     )
+        //     .then((resp) => resp.blob())
+        //     .then((blob) => {
+        //         const url = window.URL.createObjectURL(blob);
+        //         const a = document.createElement("a");
+        //         a.style.display = "none";
+        //         a.href = url;
+        //         // the filename you want
+        //         a.download = "1.pdf";
+        //         document.body.appendChild(a);
+        //         a.click();
+        //         window.URL.revokeObjectURL(url);
+        //         alert("your file has downloaded!"); // or you know, something with better UX...
+        //     })
+        //     .catch(() => alert("oh no!"));
+        // };
+    </script>
     <script>
         var sendbtn = document.querySelector('#wpcf7-f89-p90-o1 .wpcf7-submit');
         var requestform = document.querySelector('#wpcf7-f89-p90-o1 .wpcf7-form');
@@ -70,6 +109,7 @@ crossorigin="anonymous"></script>
                     array.push(checkboxes[i].value)
                 }
                 var promises = array.map(async function(value) {
+                    console.log(value);
                     if(value === "オンラインレッスン資料") {
                     await download_file('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E6%B3%95%E4%BA%BA%E5%90%91%E3%81%91%E3%80%91StepForward_%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E7%A0%94%E4%BF%AE%E3%83%91%E3%83%B3%E3%83%95%E3%83%AC%E3%83%83%E3%83%88.pdf', '【一般向け】StepForward_Online Program');
                     } else if(value === "学生様向けオンラインレッスン資料"){
@@ -85,72 +125,6 @@ crossorigin="anonymous"></script>
                 }, false);
             }
         });
-    </script>
-    <script>
-        (function (){
-
-addEvent(window, "load", function (){
-    if (isInternetExplorer())
-        polyfillDataUriDownload();
-});
-
-function polyfillDataUriDownload(){
-    var links = document.querySelectorAll('a[download], area[download]');
-    for (var index = 0, length = links.length; index<length; ++index) {
-        (function (link){
-            var dataUri = link.getAttribute("href");
-            var fileName = link.getAttribute("download");
-            if (dataUri.slice(0,5) != "data:")
-                throw new Error("The XHR part is not implemented here.");
-            addEvent(link, "click", function (event){
-                cancelEvent(event);
-                try {
-                    var dataBlob = dataUriToBlob(dataUri);
-                    forceBlobDownload(dataBlob, fileName);
-                } catch (e) {
-                    alert(e)
-                }
-            });
-        })(links[index]);
-    }
-}
-
-function forceBlobDownload(dataBlob, fileName){
-    window.navigator.msSaveBlob(dataBlob, fileName);
-}
-
-function dataUriToBlob(dataUri) {
-    if  (!(/base64/).test(dataUri))
-        throw new Error("Supports only base64 encoding.");
-    var parts = dataUri.split(/[:;,]/),
-        type = parts[1],
-        binData = atob(parts.pop()),
-        mx = binData.length,
-        uiArr = new Uint8Array(mx);
-    for(var i = 0; i<mx; ++i)
-        uiArr[i] = binData.charCodeAt(i);
-    return new Blob([uiArr], {type: type});
-}
-
-function addEvent(subject, type, listener){
-    if (window.addEventListener)
-        subject.addEventListener(type, listener, false);
-    else if (window.attachEvent)
-        subject.attachEvent("on" + type, listener);
-}
-
-function cancelEvent(event){
-    if (event.preventDefault)
-        event.preventDefault();
-    else
-        event.returnValue = false;
-}
-
-function isInternetExplorer(){
-    return /*@cc_on!@*/false || !!document.documentMode;
-}
-
-})();
     </script>
 </body>
 </html>
