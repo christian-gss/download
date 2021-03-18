@@ -23,7 +23,7 @@ crossorigin="anonymous"></script>
     <!-- </div> -->
     <button class="wpcf7-submit">download</button>
 </form>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.js"></script>
+  <script src="./download.js"></script>
     <script>
         var sendbtn = document.querySelector('#wpcf7-f89-p90-o1 .wpcf7-submit');
         var requestform = document.querySelector('#wpcf7-f89-p90-o1 .wpcf7-form');
@@ -31,6 +31,11 @@ crossorigin="anonymous"></script>
         var array = [];
 
         $( document ).ready(function() {
+
+            download_file('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【学生向け】StepForward_Online Program', 'application/pdf');
+
+
+
         const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
           async function download_file(url, filename) {
