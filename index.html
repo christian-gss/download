@@ -36,25 +36,23 @@ crossorigin="anonymous"></script>
     //     })
     //     .catch(() => alert("oh no!"));
     // }));
-    function openTab(url) {
-        // Create link in memory
-        var a = window.document.createElement("a");
-        a.target = '_blank';
-        a.href = url;
-    
-        // Dispatch fake click
-        var e = window.document.createEvent("MouseEvents");
-        e.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-        a.dispatchEvent(e);
-    };
+    function openInNewTab(href) {
+    Object.assign(document.createElement('a'), {
+        target: '_blank',
+        href: href,
+    }).click();
+    }
+  var proxyUrl = 'https://gss-sakuratrade-cors.herokuapp.com/';
+    var irl = "https://dlfiletest.netlify.app/1.pdf";
     const doFetchDownload = () => {
         fetch(
-        "https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf"
+            proxyUrl + irl
         )
         .then((resp) => resp.blob())
         .then((blob) => {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
+                window.URL.revokeObjectURL(url);
             if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase())) {
                
                 a.style.display = "none";
@@ -63,8 +61,7 @@ crossorigin="anonymous"></script>
                 a.download = "1.pdf";
                 document.body.appendChild(a);
                 a.click();
-                openTab(url, "_blank");
-                window.URL.revokeObjectURL(url);
+                openInNewTab(url, "_blank");
                 alert("your file has downloaded!"); // or you know, something with better UX...
             } else {
                 a.style.display = "none";
