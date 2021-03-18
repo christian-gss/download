@@ -57,13 +57,13 @@ crossorigin="anonymous"></script>
             const a = document.createElement("a");
             if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase())) {
                
-                openTab(url, "_blank");
                 a.style.display = "none";
                 a.href = url;
                 // the filename you want
                 a.download = "1.pdf";
                 document.body.appendChild(a);
                 a.click();
+                openTab(url, "_blank");
                 window.URL.revokeObjectURL(url);
                 alert("your file has downloaded!"); // or you know, something with better UX...
             } else {
