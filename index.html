@@ -6,10 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script
-  src="https://code.jquery.com/jquery-3.6.0.min.js"
-  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-  crossorigin="anonymous"></script>
   <style>
     .wpcf7-list-item {
         display: block;
@@ -21,18 +17,45 @@
         <td><span class="wpcf7-form-control-wrap checkbox-125"><span class="wpcf7-form-control wpcf7-checkbox wpcf7-validates-as-required"><span class="wpcf7-list-item first"><input type="checkbox" name="checkbox-125[]" value="オンラインレッスン資料"><span class="wpcf7-list-item-label">オンラインレッスン資料</span></span><span class="wpcf7-list-item"><input type="checkbox" name="checkbox-125[]" value="学生様向けオンラインレッスン資料"><span class="wpcf7-list-item-label">学生様向けオンラインレッスン資料</span></span><span class="wpcf7-list-item last"><input type="checkbox" name="checkbox-125[]" value="法人様向けオンラインレッスン資料"><span class="wpcf7-list-item-label">法人様向けオンラインレッスン資料</span></span></span></span></td>
     </div>
     <button class="wpcf7-submit">download</button>
+    <iframe></iframe>
 </form>
+<script
+src="https://code.jquery.com/jquery-3.6.0.min.js"
+integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/jquery-multiDownload @4.0.1/jquery-multiDownload .js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         var sendbtn = document.querySelector('#wpcf7-f89-p90-o1 .wpcf7-submit');
         var requestform = document.querySelector('#wpcf7-f89-p90-o1 .wpcf7-form');
         var proxyUrl = 'https://gss-sakuratrade-cors.herokuapp.com/';
-        var array = []
+        var array = [];
+    
         $( document ).ready(function() {
-        //     var url = "https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf";
-        //    var blob = new Blob([url], { type: 'application/pdf'});
-        //    saveAs(url, "【学生向け】StepForward_Online Program");
+
+            async function downloadExcel(url, filename) {
+                    let {
+                        data: data
+                    } = await this.axios.post(url,  {
+                        responseType: 'arraybuffer'
+                    });
+                    let blob = new Blob([data], {
+                        type: 'application/pdf'
+                    });
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        window.navigator.msSaveBlob(blob, filename);
+                    } else {
+                        let link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename;
+                        document.body.appendChild(link);
+                        link.click();
+                        window.URL.revokeObjectURL(link.href);
+                        document.body.removeChild(link);
+                    }
+            }
+            downloadExcel('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【学生向け】StepForward_Online Program');
             async function download_file(url, filename) {
                 await fetch(proxyUrl + url, {
                 method: 'post',
@@ -102,11 +125,11 @@
                 }
                 var promises = array.map(async function(value) {
                     if(value === "オンラインレッスン資料") {
-                    await download('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E6%B3%95%E4%BA%BA%E5%90%91%E3%81%91%E3%80%91StepForward_%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E7%A0%94%E4%BF%AE%E3%83%91%E3%83%B3%E3%83%95%E3%83%AC%E3%83%83%E3%83%88.pdf', '【一般向け】StepForward_Online Program');
+                    await multiDownload('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E6%B3%95%E4%BA%BA%E5%90%91%E3%81%91%E3%80%91StepForward_%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E7%A0%94%E4%BF%AE%E3%83%91%E3%83%B3%E3%83%95%E3%83%AC%E3%83%83%E3%83%88.pdf', '【一般向け】StepForward_Online Program');
                     } else if(value === "学生様向けオンラインレッスン資料"){
-                    await download('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【学生向け】StepForward_Online Program');
+                    await multiDownload('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E5%AD%A6%E7%94%9F%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【学生向け】StepForward_Online Program');
                     } else if(value === "法人様向けオンラインレッスン資料"){
-                    await download('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E4%B8%80%E8%88%AC%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【法人向け】StepForward_オンライン研修パンフレット');
+                    await multiDownload('https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E4%B8%80%E8%88%AC%E5%90%91%E3%81%91%E3%80%91StepForward_Online-Program.pdf', '【法人向け】StepForward_オンライン研修パンフレット');
                     }
                 });
                 Promise.all(promises).then(function() {
