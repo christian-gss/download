@@ -11,6 +11,17 @@
             display: block;
         }
       </style>
+
+</head>
+<body id="wpcf7-f89-p90-o1">
+    <!-- <form action="/request/#wpcf7-f89-p90-o1" method="post" class="wpcf7-form" novalidate="novalidate" wpcf7c="89" step="1"> -->
+        <td><span class="wpcf7-form-control-wrap checkbox-125"><span class="wpcf7-form-control wpcf7-checkbox wpcf7-validates-as-required"><span class="wpcf7-list-item first"><input type="checkbox" name="checkbox-125[]" value="オンラインレッスン資料"><span class="wpcf7-list-item-label">オンラインレッスン資料</span></span><span class="wpcf7-list-item"><input type="checkbox" name="checkbox-125[]" value="学生様向けオンラインレッスン資料"><span class="wpcf7-list-item-label">学生様向けオンラインレッスン資料</span></span><span class="wpcf7-list-item last"><input type="checkbox" name="checkbox-125[]" value="法人様向けオンラインレッスン資料"><span class="wpcf7-list-item-label">法人様向けオンラインレッスン資料</span></span></span></span></td>
+    <!-- </div> -->
+    <button class="wpcf7-submit">download</button>
+    <br/>
+    <button id="btn"  >Do Fetch Download</button>
+    <a href='./1.pdf' download target='_blank'>Download the PDF</a>
+</form>
 <script
 src="https://code.jquery.com/jquery-3.6.0.min.js"
 integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -154,17 +165,11 @@ invokeSaveAsDialog('https://stepforward-learning.com/wp/wp-content/uploads/2020/
     };
     
 });
+jQuery(document).ready(function($) {
+   $('a[href$=".pdf"]')
+        .attr('download', '')
+        .attr('target', '_blank'); 
+});
 </script>
-</head>
-<body id="wpcf7-f89-p90-o1">
-    <!-- <form action="/request/#wpcf7-f89-p90-o1" method="post" class="wpcf7-form" novalidate="novalidate" wpcf7c="89" step="1"> -->
-        <td><span class="wpcf7-form-control-wrap checkbox-125"><span class="wpcf7-form-control wpcf7-checkbox wpcf7-validates-as-required"><span class="wpcf7-list-item first"><input type="checkbox" name="checkbox-125[]" value="オンラインレッスン資料"><span class="wpcf7-list-item-label">オンラインレッスン資料</span></span><span class="wpcf7-list-item"><input type="checkbox" name="checkbox-125[]" value="学生様向けオンラインレッスン資料"><span class="wpcf7-list-item-label">学生様向けオンラインレッスン資料</span></span><span class="wpcf7-list-item last"><input type="checkbox" name="checkbox-125[]" value="法人様向けオンラインレッスン資料"><span class="wpcf7-list-item-label">法人様向けオンラインレッスン資料</span></span></span></span></td>
-    <!-- </div> -->
-    <button class="wpcf7-submit">download</button>
-    <br/>
-    <button id="btn"  >Do Fetch Download</button>
-    <a href='./1.pdf' download target='_blank'>Download the PDF</a>
-</form>
-   
 </body>
 </html>
