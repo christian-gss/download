@@ -17,25 +17,64 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 crossorigin="anonymous"></script>
  <script src="./Blob.js"></script>
  <script>
-    // $('#btn').on("click", (function () {
-    //     fetch(
-    //     "https://dlfiletest.netlify.app/1.pdf"
-    //     )
-    //     .then((resp) => resp.blob())
-    //     .then((blob) => {
-    //         const url = window.URL.createObjectURL(blob);
-    //         const a = document.createElement("a");
-    //         a.style.display = "none";
-    //         a.href = url;
-    //         // the filename you want
-    //         a.download = "1.pdf";
-    //         document.body.appendChild(a);
-    //         a.click();
-    //         window.URL.revokeObjectURL(url);
-    //         alert("your file has downloaded!"); // or you know, something with better UX...
-    //     })
-    //     .catch(() => alert("oh no!"));
-    // }));
+    $('#btn').on("click", (function () {
+        $.ajax({
+            cache: false,
+            type: 'POST',
+            url: 'https://dlfiletest.netlify.app/1.pdf',
+            contentType: false,
+            processData: false,
+            data: yourdata,
+             //xhrFields is what did the trick to read the blob to pdf
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (response, status, xhr) {
+
+                var filename = "";                   
+                var disposition = xhr.getResponseHeader('Content-Disposition');
+
+                 if (disposition) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches !== null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                } 
+                var linkelem = document.createElement('a');
+                try {
+                                           var blob = new Blob([response], { type: 'application/octet-stream' });                        
+
+                    if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                        //   IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+                        window.navigator.msSaveBlob(blob, filename);
+                    } else {
+                        var URL = window.URL || window.webkitURL;
+                        var downloadUrl = URL.createObjectURL(blob);
+
+                        if (filename) { 
+                            // use HTML5 a[download] attribute to specify filename
+                            var a = document.createElement("a");
+
+                            // safari doesn't support this yet
+                            if (typeof a.download === 'undefined') {
+                                window.location = downloadUrl;
+                            } else {
+                                a.href = downloadUrl;
+                                a.download = filename;
+                                document.body.appendChild(a);
+                                a.target = "_blank";
+                                a.click();
+                            }
+                        } else {
+                            window.location = downloadUrl;
+                        }
+                    }   
+
+                } catch (ex) {
+                    console.log(ex);
+                } 
+            }
+        });
+    }));
     function openInNewTab(href) {
     Object.assign(document.createElement('a'), {
         target: '_blank',
@@ -43,9 +82,9 @@ crossorigin="anonymous"></script>
     }).click();
     }
   var proxyUrl = 'https://gss-sakuratrade-cors.herokuapp.com/';
-    var irl = "https://stepforward-learning.com/wp/wp-content/uploads/2020/12/%E3%80%90%E6%B3%95%E4%BA%BA%E5%90%91%E3%81%91%E3%80%91StepForward_%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E7%A0%94%E4%BF%AE%E3%83%91%E3%83%B3%E3%83%95%E3%83%AC%E3%83%83%E3%83%88.pdf";
+    var link = "http://www.africau.edu/images/default/sample.pdf";
     const doFetchDownload = () => {
-        fetch(proxyUrl + irl)
+        fetch(proxyUrl + link)
         .then((resp) => resp.blob())
         .then((blob) => {
             const url = window.URL.createObjectURL(blob);
@@ -56,14 +95,14 @@ crossorigin="anonymous"></script>
             a.download = "1.pdf";
             document.body.appendChild(a);
             a.click();
-            openInNewTab(url);
             window.URL.revokeObjectURL(url);
             alert("your file has downloaded!"); // or you know, something with better UX...
-            // if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase())) {
             
         })
         .catch(() => alert("oh no!"));
     };
+    
+
 </script>
 </head>
 <body id="wpcf7-f89-p90-o1">
@@ -72,7 +111,7 @@ crossorigin="anonymous"></script>
     <!-- </div> -->
     <button class="wpcf7-submit">download</button>
     <br/>
-    <button id="btn" onclick="doFetchDownload()" target="_blank">Do Fetch Download</button>
+    <button id="btn" onclick="doFetchDownload()" >Do Fetch Download</button>
 </form>
    
 </body>
