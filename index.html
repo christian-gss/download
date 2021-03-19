@@ -17,13 +17,13 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 crossorigin="anonymous"></script>
  <script src="./Blob.js"></script>
  <script>
-
+var proxyUrl = 'https://gss-sakuratrade-cors.herokuapp.com/';
 $( document ).ready(function() {
     $('#btn').on("click", (function () {
         $.ajax({
             cache: false,
             type: 'POST',
-            url: '1.pdf',
+            url: window.location.hostname + '/1.pdf',
             contentType: false,
             processData: false,
             data: '',
