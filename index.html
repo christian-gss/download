@@ -23,10 +23,10 @@ $( document ).ready(function() {
         $.ajax({
             cache: false,
             type: 'POST',
-            url: 'https://dlfiletest.netlify.app/1.pdf',
+            url: './1.pdf',
             contentType: false,
             processData: false,
-            data: yourdata,
+            data: '',
              //xhrFields is what did the trick to read the blob to pdf
             xhrFields: {
                 responseType: 'blob'
@@ -113,7 +113,7 @@ $( document ).ready(function() {
     <!-- </div> -->
     <button class="wpcf7-submit">download</button>
     <br/>
-    <button id="btn" onclick="doFetchDownload()" >Do Fetch Download</button>
+    <button id="btn"  >Do Fetch Download</button>
     <a href='./1.pdf' download target='_blank'>Download the PDF</a>
 </form>
    
