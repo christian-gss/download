@@ -29,7 +29,7 @@ crossorigin="anonymous"></script>
 <script>
     function download(filename, text) {
   var element = document.createElement('a');
-  element.setAttribute('href', 'data:application/pdf;charset=utf-8,' + encodeURI(text));
+  element.setAttribute('href', 'data:application/octet-stream;charset=utf-8,' + encodeURI(text));
   element.setAttribute('download', filename);
 
   element.style.display = 'none';
