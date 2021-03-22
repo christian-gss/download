@@ -29,7 +29,7 @@ crossorigin="anonymous"></script>
 <script>
     function download(filename, text) {
   var element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('href', 'data:application/pdf;charset=utf-8,' + encodeURI(text));
   element.setAttribute('download', filename);
 
   element.style.display = 'none';
@@ -41,7 +41,7 @@ crossorigin="anonymous"></script>
 }
 
 // Start file download.
-download("hello.txt","This is the content of my file :)");
+download("hello.pdf","./1.pdf");
 </script>
  <script src="./Blob.js"></script>
  <script>
