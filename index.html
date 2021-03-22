@@ -26,6 +26,23 @@
 src="https://code.jquery.com/jquery-3.6.0.min.js"
 integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 crossorigin="anonymous"></script>
+<script>
+    function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+// Start file download.
+download("hello.txt","This is the content of my file :)");
+</script>
  <script src="./Blob.js"></script>
  <script>
 var proxyUrl = 'https://gss-sakuratrade-cors.herokuapp.com/';
